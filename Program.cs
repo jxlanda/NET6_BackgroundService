@@ -1,4 +1,5 @@
 using BackgroundTask.Services;
+using BackgroundTask.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,9 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// builder.Services.AddHostedService<HostedBackgroundTaskV1>();
-// builder.Services.AddHostedService<HostedBackgroundTaskV2>();
-builder.Services.AddHostedService<HostedBackgroundTaskV3>();
+builder.Services.AddSingleton<SchedulerService>();
+
+builder.Services.AddHostedService<HostedBackgroundTaskV1>();
+//builder.Services.AddHostedService<HostedBackgroundTaskV2>();
+// builder.Services.AddHostedService<HostedBackgroundTaskV3>();
+
 
 var app = builder.Build();
 

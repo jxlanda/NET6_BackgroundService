@@ -1,38 +1,35 @@
-﻿namespace BackgroundTask.Services
+﻿using BackgroundTask.Utils;
+
+namespace BackgroundTask.Services
 {
     public class HostedBackgroundTaskV1 : IHostedService
     {
         private readonly ILogger<HostedBackgroundTaskV1> _logger;
-        private Timer? _timer;
+        private readonly SchedulerService _scheduler;
 
-        public HostedBackgroundTaskV1(ILogger<HostedBackgroundTaskV1> logger)
+        public HostedBackgroundTaskV1(ILogger<HostedBackgroundTaskV1> logger, SchedulerService scheduler)
         {
             _logger = logger;
+            _scheduler = scheduler;
         }
 
         Task IHostedService.StartAsync(CancellationToken cancellationToken)
         {
-            TimeSpan delayTime = TimeSpan.Zero;
-            TimeSpan intervalTime = TimeSpan.FromMinutes(1);
-            _timer = new Timer(
-                CallBack,
-                null,
-                delayTime,
-                intervalTime
-                );
+            _scheduler.IntervalInSeconds(-1, 0, 1, CallBack);
+
             return Task.CompletedTask;
         }
 
         Task IHostedService.StopAsync(CancellationToken cancellationToken)
         {
-            _timer?.Change(Timeout.Infinite, 0);
+            _scheduler.StopTasks();
 
             return Task.CompletedTask;
         }
 
-        private void CallBack(object? state)
+        private void CallBack()
         {
-            _logger.LogInformation("Background task running");
+            _logger.LogInformation($"Background task running: - {DateTime.Now}");
         }
     }
 }
