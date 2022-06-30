@@ -10,9 +10,10 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<SchedulerService>();
 
-builder.Services.AddHostedService<HostedBackgroundTaskV1>();
+//builder.Services.AddHostedService<HostedBackgroundTaskV1>();
 //builder.Services.AddHostedService<HostedBackgroundTaskV2>();
 // builder.Services.AddHostedService<HostedBackgroundTaskV3>();
+builder.Services.AddHostedService<HostedBackgroundTaskV4>();
 
 
 var app = builder.Build();
